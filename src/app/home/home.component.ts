@@ -2,9 +2,8 @@ import {Component, OnInit} from "@angular/core";
 import { MatTableDataSource } from '@angular/material/table';
 import { AbstractControl, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
 
-import { User, UserColumns } from './model/user.model';
+import { User } from './model/user.model';
 import { UserService } from './services/user.service';
 import { UsersState } from './store/user.state';
 import { loadUsers, updateUser } from './store/actions/user.actions';
@@ -18,7 +17,6 @@ import { selectUsers } from './store/selectors/user.selectors';
 export class HomeComponent {
 
   userForm: FormGroup;
-  users$: Observable<User[]> = new Observable();
   dataSource = new MatTableDataSource<User>([]);
 
   constructor(private fb: FormBuilder, private userService: UserService,
