@@ -1,0 +1,56 @@
+<article class="table-header">
+  <div>
+    <i>User List</i>
+  </div>
+</article>
+
+<form [formGroup]="userForm">
+  <mat-table [dataSource]="dataSource" formArrayName="items">
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+      <mat-cell *matCellDef="let item; let i = index" [formGroupName]="i">
+        <input matInput formControlName="name" [readonly]="!item.isEdit">
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="username">
+      <mat-header-cell *matHeaderCellDef> Username </mat-header-cell>
+      <mat-cell *matCellDef="let item; let i = index" [formGroupName]="i">
+        <input matInput formControlName="username" [readonly]="!item.isEdit">
+        <mat-error *ngIf="getUserFormControl(i)?.get('username')?.hasError('required')">
+          Required
+        </mat-error>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+      <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
+      <mat-cell *matCellDef="let item; let i = index" [formGroupName]="i">
+        <input matInput formControlName="email" [readonly]="!item.isEdit">
+        <mat-error *ngIf="getUserFormControl(i)?.get('email')?.hasError('email') && !getUserFormControl(i)?.get('email')?.hasError('required')">
+          Invalid email
+        </mat-error>
+        <mat-error *ngIf="getUserFormControl(i)?.get('email')?.hasError('required')">
+          Required
+        </mat-error>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="action">
+      <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
+      <mat-cell *matCellDef="let item; let i = index" [formGroupName]="i">
+        <button mat-button (click)="item.isEdit = !item.isEdit" *ngIf="!item.isEdit">
+          Edit
+        </button>
+        <button mat-button *ngIf="item.isEdit" (click)="updateRowData(i)" [disabled]="userForm.invalid">
+          Save
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="['name', 'username', 'email', 'action']"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: ['name', 'username', 'email', 'action'];"></mat-row>
+
+  </mat-table>
+</form>
+
